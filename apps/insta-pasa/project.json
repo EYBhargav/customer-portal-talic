@@ -1,0 +1,96 @@
+{
+  "name": "insta-pasa",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/insta-pasa/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/insta-pasa",
+        "index": "apps/insta-pasa/src/index.html",
+        "baseHref": "/",
+        "main": "apps/insta-pasa/src/main.tsx",
+        "tsConfig": "apps/insta-pasa/tsconfig.app.json",
+        "assets": [
+          "apps/insta-pasa/src/favicon.ico",
+          "apps/insta-pasa/src/assets"
+        ],
+        "styles": ["apps/insta-pasa/src/styles.scss"],
+        "scripts": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/insta-pasa/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/insta-pasa/src/environments/environment.ts",
+              "with": "apps/insta-pasa/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "insta-pasa:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "insta-pasa:build:development"
+        },
+        "production": {
+          "buildTarget": "insta-pasa:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/insta-pasa/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "insta-pasa:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/insta-pasa/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
